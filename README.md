@@ -3,7 +3,7 @@
 <h1 align="center">ESP-IDF Quotes Component</h1>
 
 <p align="center">
-Quotes 是服务于 ESP-IDF 的组件<br/>
+esp_quotes 是服务于 ESP-IDF 的组件<br/>
 用于获取随机的名人名言、古诗词、每日一句、今日新闻等<br/>
 提供多个内置 API 源的选择
 </p>
@@ -11,8 +11,8 @@ Quotes 是服务于 ESP-IDF 的组件<br/>
 <p align="center">
 <a href="./README_en_US.md">English</a>
 · 简体中文
-· <a href="https://github.com/MDLZCOOL/quotes/releases">更新日志</a>
-· <a href="https://github.com/MDLZCOOL/quotes/issues">反馈问题</a>
+· <a href="https://github.com/MDLZCOOL/esp_quotes/releases">更新日志</a>
+· <a href="https://github.com/MDLZCOOL/esp_quotes/issues">反馈问题</a>
 </p>
 
 <p align="center">
@@ -28,8 +28,8 @@ Quotes 是服务于 ESP-IDF 的组件<br/>
   <a href="">
     <img alt="Version" src="https://img.shields.io/badge/Version-v0.0.1-brightgreen.svg" />
   </a>
-  <a href="https://github.com/NingZiXi/weather/stargazers">
-    <img alt="GitHub Stars" src="https://img.shields.io/github/stars/MDLZCOOL/quotes.svg?style=social&label=Stars" />
+  <a href="https://github.com/MDLZCOOL/esp_quotes/stargazers">
+    <img alt="GitHub Stars" src="https://img.shields.io/github/stars/MDLZCOOL/esp_quotes.svg?style=social&label=Stars" />
   </a>
 </p>
 
@@ -39,8 +39,84 @@ Quotes 是服务于 ESP-IDF 的组件<br/>
 
 ## 📖 介绍
 
+`esp_quotes` 是一个为 ESP-IDF 设计的组件，用于从多个在线 API 获取“每日一句”内容。它支持多种名言、诗词和句子的来源，可以轻松地集成到您的项目中，为您的应用增添一些趣味性和文化气息。
+
+**已支持的 API：**
+
+| API 名称 | 来源 | 说明 |
+| :--- | :--- | :--- |
+| `iciba` | [金山词霸](https://www.iciba.com/) | 提供每日一句英文以及对应的中文翻译和图片。 |
+| `hitokoto` | [一言](https://hitokoto.cn/) | 提供一句源自于 ACG（动漫、漫画、游戏）文化的句子。 |
+| `jinrishici` | [今日诗词](https://www.jinrishici.com/) | 提供一句优美的中国古诗词。 |
+| `shanbay` | [扇贝单词](https://web.shanbay.com/web/main) | 提供每日一句英文以及对应的中文翻译和图片。 |
+
+该组件封装了 HTTP 请求、JSON 解析和内存管理等复杂操作，提供了简洁的接口供上层应用调用。
+
 ## 🔔 安装
+
+要将组件添加到项目中请在 ESP-IDF 终端执行下方命令：
+
+```bash
+idf.py add-dependency "MDLZCOOL/esp_quotes^0.0.1"
+```
+
+或者直接克隆本仓库到项目 `components` 目录下：
+
+```bash
+git clone https://github.com/MDLZCOOL/esp_quotes
+```
 
 ## 📣 配置
 
+在您的 ESP-IDF 项目根目录下，运行 `idf.py menuconfig` 命令来配置组件。
+
+1. 进入 `Component config --->`
+2. 找到 `Quotes Configuration --->`
+3. 根据您的需求选择一个 API 来源。
+
+```
+(Top) → Component config → Quotes Configuration
+[ ] none (Implement it yourself)
+[ ] Use iciba API
+[ ] Use hitokoto API
+[ ] Use jinrishici API
+[ ] Use shanbay API
+```
+
+> [!NOTE]  
+> 如果您选择 `none (Implement yourself)`，`quotes_fetch` 函数将不会执行任何操作。您需要在该选项下自行实现数据获取逻辑。
+
 ## 🎉 使用
+
+以下是一个在您的项目种使用该组件的简单示例：
+
+```c
+#include "quotes.h"
+
+void app_main(void)
+{
+    // 联网部分省略
+    
+    // 存储 quote 信息
+    quote_info_t quote;
+    
+    // quotes_fetch 会根据 menuconfig 中的配置自动选择 API
+    if (quotes_fetch(&quote) == 0)
+    {
+        // 打印获取到的信息
+        quotes_print(&quote);
+    }
+    
+    // 用完后释放，防止内存泄漏
+    quotes_info_free(&quote);
+
+    for (;;)
+    {
+        vTaskDelay(portMAX_DELAY);
+    }
+}
+```
+
+## 🤝 贡献
+
+本项目采用 MIT 许可证，详情请参阅 [LICENSE.txt](./LICENSE.txt) 文件，本项目仍在完善中，可能会有一些功能尚未完善或存在 Bug。如果您在使用过程中遇到任何问题，请随时联系作者或提交 Issue 来帮助改进本项目！
