@@ -3,14 +3,7 @@
 <h1 align="center">ESP-IDF Quotes Component</h1>
 
 <p align="center">
-esp_quotes 是服务于 ESP-IDF 的组件<br/>
-用于获取随机的名人名言、古诗词、每日一句、今日新闻等<br/>
-提供多个内置 API 源的选择
-</p>
-
-<p align="center">
-<a href="./README_en_US.md">English</a>
-· 简体中文
+简体中文
 · <a href="https://github.com/MDLZCOOL/esp_quotes/releases">更新日志</a>
 · <a href="https://github.com/MDLZCOOL/esp_quotes/issues">反馈问题</a>
 </p>
@@ -35,11 +28,9 @@ esp_quotes 是服务于 ESP-IDF 的组件<br/>
 
 ---
 
-## 如果您喜欢本项目，请给我点个⭐吧(๑>◡<๑)！
-
 ## 📖 介绍
 
-`esp_quotes` 是一个为 ESP-IDF 设计的组件，用于从多个在线 API 获取“每日一句”内容。它支持多种名言、诗词和句子的来源，可以轻松地集成到您的项目中，为您的应用增添一些趣味性和文化气息。
+`esp_quotes` 是服务于 ESP-IDF 的组件，用于获取随机的名人名言、古诗词、每日一句、今日新闻等，提供多个内置 API 源的选择。
 
 **已支持的 API：**
 
@@ -84,7 +75,7 @@ git clone https://github.com/MDLZCOOL/esp_quotes
 ```
 
 > [!NOTE]  
-> 如果您选择 `none (Implement yourself)`，`quotes_fetch` 函数将不会执行任何操作。您需要在该选项下自行实现数据获取逻辑。
+> 如果您选择 `none (Implement yourself)`，`quotes_fetch` 函数将不会执行任何操作。您需要自行实现数据获取逻辑。
 
 ## 🎉 使用
 
@@ -119,4 +110,6 @@ void app_main(void)
 
 ## 🤝 贡献
 
-本项目采用 MIT 许可证，详情请参阅 [LICENSE.txt](./LICENSE.txt) 文件，本项目仍在完善中，可能会有一些功能尚未完善或存在 Bug。如果您在使用过程中遇到任何问题，请随时联系作者或提交 Issue 来帮助改进本项目！
+本项目采用 MIT 许可证，详情请参阅 [LICENSE.txt](./LICENSE.txt) 文件，本项目仍在完善中，可能会有一些功能尚未完善或存在 Bug。如果您在使用过程中遇到任何问题，请随时联系作者或提交 Issue 来帮助改进本项目！同时欢迎提供新的 API，我会审查后第一时间更新支持。
+
+## 如果您喜欢本项目，请给我点个⭐吧(๑>◡<๑)！
