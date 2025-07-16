@@ -4,7 +4,7 @@ on:
 jobs:
   upload_components:
     permissions:
-      id-token: write # IMPORTANT: Required to generate an OIDC Token
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
