@@ -1,0 +1,10 @@
+version: "0.0.1"
+license: "MIT"
+description: "Quotes collects quotes api and is easy to use."
+url: "https://github.com/MDLZCOOL/quotes"
+files:
+  exclude:
+  - .git
+dependencies:
+  idf:
+    version: ">=5.3.1"

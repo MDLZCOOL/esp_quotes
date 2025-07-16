@@ -1,0 +1,14 @@
+choice
+    prompt "Quotes Configuration"
+    config USE_QUOTE_API_NONE
+        bool "none (Implement yourself)"
+        default y
+    config USE_QUOTE_API_ICIBA
+        bool "Use iciba API"
+    config USE_QUOTE_API_HITOKOTO
+        bool "Use hitokoto API"
+    config USE_QUOTE_API_JINRISHICI
+        bool "Use jinrishici API"
+    config USE_QUOTE_API_SHANBAY
+        bool "Use shanbay API"
+endchoice
