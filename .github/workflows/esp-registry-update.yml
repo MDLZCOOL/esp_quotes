@@ -1,54 +1,17 @@
-name: Upload ESP-IDF component on version change
+name: Push component to https://components.espressif.com
 on:
   push:
-    paths:
-      - "idf_component.yml"
 jobs:
-  detect-version-change:
-    runs-on: ubuntu-latest
-    name: Check if version changed
-    outputs:
-      version_changed: ${{ steps.filter.outputs.version_changed }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Get previous commit
-        id: prev
-        run: echo "commit=$(git rev-parse HEAD^1)" >> $GITHUB_OUTPUT
-      - name: Compare version field in idf_component.yml
-        id: filter
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            version_changed:
-              - 'idf_component.yml'
-          base: ${{ steps.prev.outputs.commit }}
-          separator: ' '
-      - name: Extract version values and compare
-        id: version_diff
-        run: |
-          sudo apt-get update && sudo apt-get install -y yq
-          old_ver=$(git show ${{ steps.prev.outputs.commit }}:idf_component.yml | yq '.version')
-          new_ver=$(yq '.version' idf_component.yml)
-          echo "Old version: $old_ver"
-          echo "New version: $new_ver"
-          if [ "$old_ver" != "$new_ver" ]; then
-            echo "version_changed=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "version_changed=false" >> "$GITHUB_OUTPUT"
-          fi
   upload_components:
-    needs: detect-version-change
-    if: needs.detect-version-change.outputs.version_changed == 'true'
-    runs-on: ubuntu-latest
     permissions:
-      id-token: write
+      id-token: write # IMPORTANT: Required to generate an OIDC Token
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: "recursive"
       - name: Upload component to the component registry
         uses: espressif/upload-components-ci-action@v2
         with:
-          components: "esp_quotes"
-          namespace: "MDLZCOOL"
-          api_token: ${{ secrets.IDF_COMPONENT_API_TOKEN }}
+          components: "esp_quotes: ."
+          namespace: "mdlzcool"
