@@ -12,36 +12,36 @@ extern "C"
      */
     typedef struct
     {
-        char *content;     ///< 原文
-        char *translation; ///< 译文（如果有）
-        char *source;      ///< 来源
-        char *image;       ///< 图片 URL（如果有）
+        char *content;     ///< quote content
+        char *translation; ///< translations (if available)
+        char *source;      ///< source
+        char *image;       ///< picture URL (if available)
     } quote_info_t;
 
     /**
-     * @brief 初始化 quote
+     * @brief Initialize quote
      */
     void quotes_init(void);
 
     /**
-     * @brief 获取 quote 数据
+     * @brief Fetch quote data
      *
-     * @param out 填充的 quote 信息
-     * @return int 0 成功，-1 失败
+     * @param out quote struct
+     * @return int 0 success, -1 failure
      */
     int quotes_fetch(quote_info_t *out);
 
     /**
-     * @brief 打印 quote 内容
+     * @brief Print available quote contents
      *
-     * @param quote 待输出的 quote 信息
+     * @param quote quote struct
      */
     void quotes_print(const quote_info_t *quote);
 
     /**
-     * @brief 释放 quote 动态内存
+     * @brief Free quote memory
      *
-     * @param quote 待释放的 quote 信息
+     * @param quote quote struct
      */
     void quotes_info_free(quote_info_t *quote);
 
