@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-static const char* TAG = "QUOTES";
+static const char *TAG = "QUOTES";
 #define MAX_HTTP_RECV_BUFFER 8192
 
 #define SAFE_FREE(p)                                                                                                   \
@@ -18,29 +18,30 @@ static const char* TAG = "QUOTES";
             (p) = NULL;                                                                                                \
         }                                                                                                              \
     } while (0)
-#define PARSE_JSON(json_str, root_var)   \
-do {                                     \
-root_var = cJSON_Parse(json_str);    \
-if (!root_var)                       \
-{                                    \
-SAFE_FREE(json_str);             \
-return -1;                  \
-}                                    \
-} while(0)
+#define PARSE_JSON(json_str, root_var)                                                                                 \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        root_var = cJSON_Parse(json_str);                                                                              \
+        if (!root_var)                                                                                                 \
+        {                                                                                                              \
+            SAFE_FREE(json_str);                                                                                       \
+            return -1;                                                                                                 \
+        }                                                                                                              \
+    } while (0)
 
 typedef struct
 {
-    char* buf;
+    char *buf;
     size_t len;
     size_t max_len;
 } http_buf_t;
 
 // HTTP callback handler
-static esp_err_t _http_event_handler(esp_http_client_event_t* evt)
+static esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 {
     if (evt->event_id == HTTP_EVENT_ON_DATA)
     {
-        http_buf_t* ctx = (http_buf_t*)evt->user_data;
+        http_buf_t *ctx = (http_buf_t *)evt->user_data;
         if (ctx && ctx->buf && ctx->len + evt->data_len < ctx->max_len)
         {
             memcpy(ctx->buf + ctx->len, evt->data, evt->data_len);
@@ -51,7 +52,7 @@ static esp_err_t _http_event_handler(esp_http_client_event_t* evt)
 }
 
 // execute HTTP request
-static char* http_fetch(const char* url)
+static char *http_fetch(const char *url)
 {
     http_buf_t recv_ctx = {.buf = calloc(1, MAX_HTTP_RECV_BUFFER), .len = 0, .max_len = MAX_HTTP_RECV_BUFFER};
     if (!recv_ctx.buf)
@@ -86,25 +87,25 @@ static char* http_fetch(const char* url)
         return NULL;
     }
 
-    char* result = strndup(recv_ctx.buf, recv_ctx.len);
+    char *result = strndup(recv_ctx.buf, recv_ctx.len);
     SAFE_FREE(recv_ctx.buf);
     return result;
 }
 
 // 金山词霸 iciba
 // https://open.iciba.com/dsapi/
-static int fetch_iciba(quote_info_t* out)
+static int fetch_iciba(quote_info_t *out)
 {
-    char* json = http_fetch("https://open.iciba.com/dsapi/");
+    char *json = http_fetch("https://open.iciba.com/dsapi/");
     if (!json)
         return -1;
 
-    cJSON* root = NULL;
+    cJSON *root = NULL;
     PARSE_JSON(json, root);
 
-    cJSON* content = cJSON_GetObjectItem(root, "content");
-    cJSON* note = cJSON_GetObjectItem(root, "note");
-    cJSON* pic = cJSON_GetObjectItem(root, "picture");
+    cJSON *content = cJSON_GetObjectItem(root, "content");
+    cJSON *note = cJSON_GetObjectItem(root, "note");
+    cJSON *pic = cJSON_GetObjectItem(root, "picture");
 
     if (content && content->valuestring)
         out->content = strdup(content->valuestring);
@@ -122,17 +123,17 @@ static int fetch_iciba(quote_info_t* out)
 
 // 一言 hitokoto
 // https://v1.hitokoto.cn/?encode=json
-static int fetch_hitokoto(quote_info_t* out)
+static int fetch_hitokoto(quote_info_t *out)
 {
-    char* json = http_fetch("https://v1.hitokoto.cn/?encode=json");
+    char *json = http_fetch("https://v1.hitokoto.cn/?encode=json");
     if (!json)
         return -1;
 
-    cJSON* root = NULL;
+    cJSON *root = NULL;
     PARSE_JSON(json, root);
 
-    cJSON* hitokoto = cJSON_GetObjectItem(root, "hitokoto");
-    cJSON* from = cJSON_GetObjectItem(root, "from");
+    cJSON *hitokoto = cJSON_GetObjectItem(root, "hitokoto");
+    cJSON *from = cJSON_GetObjectItem(root, "from");
 
     if (hitokoto && hitokoto->valuestring)
         out->content = strdup(hitokoto->valuestring);
@@ -146,25 +147,25 @@ static int fetch_hitokoto(quote_info_t* out)
 
 // 今日诗词 jinrishici
 // https://v2.jinrishici.com/sentence
-static int fetch_jinrishici(quote_info_t* out)
+static int fetch_jinrishici(quote_info_t *out)
 {
-    char* json = http_fetch("https://v2.jinrishici.com/sentence");
+    char *json = http_fetch("https://v2.jinrishici.com/sentence");
     if (!json)
         return -1;
 
-    cJSON* root = NULL;
+    cJSON *root = NULL;
     PARSE_JSON(json, root);
 
-    cJSON* data = cJSON_GetObjectItem(root, "data");
+    cJSON *data = cJSON_GetObjectItem(root, "data");
     if (data)
     {
-        cJSON* content = cJSON_GetObjectItem(data, "content");
+        cJSON *content = cJSON_GetObjectItem(data, "content");
         if (content && content->valuestring)
             out->content = strdup(content->valuestring);
-        cJSON* origin = cJSON_GetObjectItem(data, "origin");
+        cJSON *origin = cJSON_GetObjectItem(data, "origin");
         if (origin)
         {
-            cJSON* author = cJSON_GetObjectItem(origin, "author");
+            cJSON *author = cJSON_GetObjectItem(origin, "author");
             if (author && author->valuestring)
                 out->source = strdup(author->valuestring);
         }
@@ -177,16 +178,16 @@ static int fetch_jinrishici(quote_info_t* out)
 
 // 今日诗词 jinrishici token
 // https://v2.jinrishici.com/token
-static int fetch_jinrishici_token(quote_info_t* out)
+static int fetch_jinrishici_token(quote_info_t *out)
 {
-    char* json = http_fetch("https://v2.jinrishici.com/token");
+    char *json = http_fetch("https://v2.jinrishici.com/token");
     if (!json)
         return -1;
 
-    cJSON* root = NULL;
+    cJSON *root = NULL;
     PARSE_JSON(json, root);
 
-    cJSON* data = cJSON_GetObjectItem(root, "data");
+    cJSON *data = cJSON_GetObjectItem(root, "data");
     if (data && data->valuestring)
         ESP_LOGI(TAG, "Jinrishici token: %s", data->valuestring);
 
@@ -197,19 +198,19 @@ static int fetch_jinrishici_token(quote_info_t* out)
 
 // 扇贝单词 shanbay
 // https://apiv3.shanbay.com/weapps/dailyquote/quote
-static int fetch_shanbay(quote_info_t* out)
+static int fetch_shanbay(quote_info_t *out)
 {
-    char* json = http_fetch("https://apiv3.shanbay.com/weapps/dailyquote/quote");
+    char *json = http_fetch("https://apiv3.shanbay.com/weapps/dailyquote/quote");
     if (!json)
         return -1;
 
-    cJSON* root = NULL;
+    cJSON *root = NULL;
     PARSE_JSON(json, root);
 
-    cJSON* content = cJSON_GetObjectItem(root, "content");
-    cJSON* author = cJSON_GetObjectItem(root, "author");
-    cJSON* translation = cJSON_GetObjectItem(root, "translation");
-    cJSON* picture = cJSON_GetObjectItem(root, "poster_img_urls");
+    cJSON *content = cJSON_GetObjectItem(root, "content");
+    cJSON *author = cJSON_GetObjectItem(root, "author");
+    cJSON *translation = cJSON_GetObjectItem(root, "translation");
+    cJSON *picture = cJSON_GetObjectItem(root, "poster_img_urls");
 
     if (content && content->valuestring)
         out->content = strdup(content->valuestring);
@@ -217,7 +218,7 @@ static int fetch_shanbay(quote_info_t* out)
         out->source = strdup(author->valuestring);
     if (translation && translation->valuestring)
         out->translation = strdup(translation->valuestring);
-    cJSON* url_item = cJSON_GetArrayItem(picture, 0);
+    cJSON *url_item = cJSON_GetArrayItem(picture, 0);
     if (cJSON_IsString(url_item) && url_item->valuestring)
         out->image = strdup(url_item->valuestring);
 
@@ -231,7 +232,7 @@ __attribute__((unused)) void quotes_init(void)
     // reserve for future use
 }
 
-int quotes_fetch(quote_info_t* out)
+int quotes_fetch(quote_info_t *out)
 {
     if (!out)
         return -1;
@@ -252,7 +253,7 @@ int quotes_fetch(quote_info_t* out)
 #endif
 }
 
-void quotes_print(const quote_info_t* quote)
+void quotes_print(const quote_info_t *quote)
 {
     if (!quote)
         return;
@@ -269,7 +270,7 @@ void quotes_print(const quote_info_t* quote)
     printf("\n");
 }
 
-void quotes_info_free(quote_info_t* quote)
+void quotes_info_free(quote_info_t *quote)
 {
     if (!quote)
         return;
