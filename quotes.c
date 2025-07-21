@@ -227,6 +227,31 @@ static int fetch_shanbay(quote_info_t *out)
     return 0;
 }
 
+// xygeng-one
+// https://api.xygeng.cn/openapi/one
+static int fetch_xygeng_one(quote_info_t *out)
+{
+    char *json = http_fetch("https://api.xygeng.cn/openapi/one");
+    if (!json)
+        return -1;
+
+    cJSON *root = NULL;
+    PARSE_JSON(json, root);
+
+    cJSON *data = cJSON_GetObjectItem(root, "data");
+    cJSON *origin = cJSON_GetObjectItem(data, "origin");
+    cJSON *content = cJSON_GetObjectItem(data, "content");
+
+    if (content && content->valuestring)
+        out->content = strdup(content->valuestring);
+    if (origin && origin->valuestring)
+        out->source = strdup(origin->valuestring);
+
+    cJSON_Delete(root);
+    SAFE_FREE(json);
+    return 0;
+}
+
 __attribute__((unused)) void quotes_init(void)
 {
     // reserve for future use
@@ -248,6 +273,8 @@ int quotes_fetch(quote_info_t *out)
     return fetch_jinrishici(out);
 #elif CONFIG_USE_QUOTE_API_SHANBAY
     return fetch_shanbay(out);
+#elif CONFIG_USE_QUOTE_API_XYGENG_ONE
+    return fetch_xygeng_one(out);
 #else
 #error "Unknown quote API"
 #endif

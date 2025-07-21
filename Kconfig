@@ -11,4 +11,6 @@ choice
         bool "Use jinrishici API"
     config USE_QUOTE_API_SHANBAY
         bool "Use shanbay API"
+    config USE_QUOTE_API_XYGENG_ONE
+        bool "Use xygeng-one API"
 endchoice

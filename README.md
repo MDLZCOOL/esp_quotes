@@ -37,9 +37,10 @@
 | API 名称 | 来源 | 说明 |
 | :--- | :--- | :--- |
 | `iciba` | [金山词霸](https://www.iciba.com/) | 提供每日一句英文以及对应的中文翻译和图片。 |
-| `hitokoto` | [一言](https://hitokoto.cn/) | 提供一句源自于 ACG（动漫、漫画、游戏）文化的句子。 |
+| `hitokoto` | [一言](https://hitokoto.cn/) | 提供一句源自于 ACG（动漫、漫画、游戏）文化等的句子。 |
 | `jinrishici` | [今日诗词](https://www.jinrishici.com/) | 提供一句优美的中国古诗词。 |
 | `shanbay` | [扇贝单词](https://web.shanbay.com/web/main) | 提供每日一句英文以及对应的中文翻译和图片。 |
+| `xygeng-one` | [XY-API](https://docs.xygeng.cn/) | 提供一句源自于漫画、歌曲评论、影视剧等的句子 |
 
 该组件封装了 HTTP 请求、JSON 解析和内存管理等复杂操作，提供了简洁的接口供上层应用调用。
 
