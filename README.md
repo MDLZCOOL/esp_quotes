@@ -41,7 +41,7 @@
 | `jinrishici` | [今日诗词](https://www.jinrishici.com/) | 提供一句优美的中国古诗词。 |
 | `shanbay` | [扇贝单词](https://web.shanbay.com/web/main) | 提供每日一句英文以及对应的中文翻译和图片。 |
 | `xygeng-one` | [XY-API](https://docs.xygeng.cn/) | 提供一句源自于漫画、歌曲评论、影视剧等的句子 |
-| `keai-wangyiyun` | [网易云热评](https://keai.icu/apiwyy/) | 提供网易云热评 |
+| `keai-wangyiyun` | [网易云热评](https://keai.icu/apiwyy/) | 提供一句随机的网易云热评 |
 
 该组件封装了 HTTP 请求、JSON 解析和内存管理等复杂操作，提供了简洁的接口供上层应用调用。
 
