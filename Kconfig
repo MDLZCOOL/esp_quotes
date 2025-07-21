@@ -13,4 +13,6 @@ choice
         bool "Use shanbay API"
     config USE_QUOTE_API_XYGENG_ONE
         bool "Use xygeng-one API"
+    config USE_QUOTE_API_KEAI_WANGYIYUN
+        bool "Use keai API (wangyiyun)"
 endchoice

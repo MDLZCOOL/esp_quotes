@@ -252,6 +252,30 @@ static int fetch_xygeng_one(quote_info_t *out)
     return 0;
 }
 
+// keai-wangyiyun
+// https://keai.icu/apiwyy/api
+static int fetch_keai_wangyiyun(quote_info_t *out)
+{
+    char *json = http_fetch("https://keai.icu/apiwyy/api");
+    if (!json)
+        return -1;
+
+    cJSON *root = NULL;
+    PARSE_JSON(json, root);
+
+    cJSON *user = cJSON_GetObjectItem(root, "user");
+    cJSON *content = cJSON_GetObjectItem(root, "content");
+
+    if (content && content->valuestring)
+        out->content = strdup(content->valuestring);
+    if (user && user->valuestring)
+        out->source = strdup(user->valuestring);
+
+    cJSON_Delete(root);
+    SAFE_FREE(json);
+    return 0;
+}
+
 __attribute__((unused)) void quotes_init(void)
 {
     // reserve for future use
@@ -275,6 +299,8 @@ int quotes_fetch(quote_info_t *out)
     return fetch_shanbay(out);
 #elif CONFIG_USE_QUOTE_API_XYGENG_ONE
     return fetch_xygeng_one(out);
+#elif CONFIG_USE_QUOTE_API_KEAI_WANGYIYUN
+    return fetch_keai_wangyiyun(out);
 #else
 #error "Unknown quote API"
 #endif
