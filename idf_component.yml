@@ -1,6 +1,6 @@
-version: "0.0.2"
+version: "0.0.3"
 license: "MIT"
-description: "esp_quotes 可以用于获取随机的名人名言、古诗词、每日一句、今日新闻等，提供多个内置 API 源的选择。"
+description: "esp_quotes 可以用于获取随机的名人名言、古诗词、每日一句、歌曲评论等，提供多个内置 API 源的选择。"
 url: "https://github.com/MDLZCOOL/esp_quotes"
 files:
   exclude:

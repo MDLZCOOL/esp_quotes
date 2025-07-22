@@ -4,7 +4,7 @@
 
 <p align="center">
 简体中文
-· <a href="https://github.com/MDLZCOOL/esp_quotes/releases">更新日志</a>
+· <a href="./CHANGELOG.txt">更新日志</a>
 · <a href="https://github.com/MDLZCOOL/esp_quotes/issues">反馈问题</a>
 </p>
 
@@ -19,12 +19,13 @@
     <img alt="ESP-IDF" src="https://img.shields.io/badge/Platform-ESP--IDF-green.svg" />
   </a>
   <a href="">
-    <img alt="Version" src="https://img.shields.io/badge/Version-v0.0.1-brightgreen.svg" />
+    <img alt="Version" src="https://img.shields.io/badge/Version-v0.0.3-brightgreen.svg" />
   </a>
   <a href="https://github.com/MDLZCOOL/esp_quotes/stargazers">
     <img alt="GitHub Stars" src="https://img.shields.io/github/stars/MDLZCOOL/esp_quotes.svg?style=social&label=Stars" />
   </a>
 </p>
+
 
 ---
 
@@ -88,25 +89,21 @@ git clone https://github.com/MDLZCOOL/esp_quotes
 
 void app_main(void)
 {
-    // 联网部分省略
+    /* 联网部分省略 */
     
-    // 存储 quote 信息
+    /* 存储 quote 信息 */
     quote_info_t quote;
     
-    // quotes_fetch 会根据 menuconfig 中的配置自动选择 API
+    /* quotes_fetch 会根据 menuconfig 中的配置自动选择 API */
     if (quotes_fetch(&quote) == 0)
     {
-        // 打印获取到的信息
+        /* 打印获取到的信息 */
+        /* 获取到的信息存储在quote_info_t里，亦可直接调用 */
         quotes_print(&quote);
     }
     
-    // 用完后释放，防止内存泄漏
+    /* 用完后释放，防止内存泄漏 */
     quotes_info_free(&quote);
-
-    for (;;)
-    {
-        vTaskDelay(portMAX_DELAY);
-    }
 }
 ```
 
